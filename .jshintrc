@@ -26,6 +26,7 @@
     "JScrollPane": true,
     "JOptionPane": true,
     "JTextArea": true,
+    "JSlider": true,
     "Timer": true,
     "Board": true,
     "LifeGui": true,

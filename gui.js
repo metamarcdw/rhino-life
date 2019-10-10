@@ -8,9 +8,10 @@ load('board.js');
 load('patternParsers.js');
 
 function LifeGui () {
-  this.speed = 100;
   this.running = false;
   this.pattern = null;
+  const defaultSpeed = 500;
+  const defaultZoom = 10;
 
   this.size = 100;
   this.cellSize = 10;
@@ -40,6 +41,14 @@ function LifeGui () {
   buttonPanel.setLayout(new FlowLayout());
   panel.add(buttonPanel, BorderLayout.PAGE_END);
 
+  const zoomLabel = new JLabel('Zoom');
+  buttonPanel.add(zoomLabel);
+
+  const zoomSlider = new JSlider(JSlider.HORIZONTAL, 3, 20, defaultZoom);
+  const updateZoomBound = this.updateZoom.bind(this);
+  zoomSlider.addChangeListener({ stateChanged: updateZoomBound });
+  buttonPanel.add(zoomSlider);
+
   this.startOrStopButton = new JButton('Start');
   const startOrStopBound = this.startOrStop.bind(this);
   this.startOrStopButton.addActionListener({ actionPerformed: startOrStopBound });
@@ -55,8 +64,17 @@ function LifeGui () {
   loadButton.addActionListener({ actionPerformed: loadPatternBound });
   buttonPanel.add(loadButton);
 
+  const speedSlider = new JSlider(JSlider.HORIZONTAL, 10, 1000, defaultSpeed);
+  const updateSpeedBound = this.updateSpeed.bind(this);
+  speedSlider.setInverted(true);
+  speedSlider.addChangeListener({ stateChanged: updateSpeedBound });
+  buttonPanel.add(speedSlider);
+
+  const speedLabel = new JLabel('Speed');
+  buttonPanel.add(speedLabel);
+
   const updateBound = this.update.bind(this);
-  this.timer = new Timer(this.speed, { actionPerformed: updateBound });
+  this.timer = new Timer(defaultSpeed, { actionPerformed: updateBound });
 }
 
 LifeGui.prototype.showUI = function () {
@@ -80,6 +98,21 @@ LifeGui.prototype.updateBoardImage = function () {
 LifeGui.prototype.update = function () {
   this.board.generate();
   this.updateBoardImage();
+};
+
+LifeGui.prototype.updateZoom = function (event) {
+  const source = event.getSource();
+  if (source.getValueIsAdjusting()) {
+    this.cellSize = source.getValue();
+    this.updateBoardImage();
+  }
+};
+
+LifeGui.prototype.updateSpeed = function (event) {
+  const source = event.getSource();
+  if (source.getValueIsAdjusting()) {
+    this.timer.setDelay(source.getValue());
+  }
 };
 
 LifeGui.prototype.startOrStop = function () {
