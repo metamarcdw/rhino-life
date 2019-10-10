@@ -67,6 +67,8 @@ function LifeGui () {
   const speedSlider = new JSlider(JSlider.HORIZONTAL, 10, 1000, defaultSpeed);
   const updateSpeedBound = this.updateSpeed.bind(this);
   speedSlider.setInverted(true);
+  speedSlider.setSnapToTicks(true);
+  speedSlider.setMajorTickSpacing(50);
   speedSlider.addChangeListener({ stateChanged: updateSpeedBound });
   buttonPanel.add(speedSlider);
 
