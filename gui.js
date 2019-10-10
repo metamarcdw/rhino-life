@@ -177,8 +177,13 @@ LifeGui.prototype.drawGrid = function (g2d) {
   g2d.setColor(Color.LIGHT_GRAY);
   g2d.setStroke(new BasicStroke(1));
   const fullSize = this.size * this.cellSize;
+
   for (let i = 0; i < fullSize; i += this.cellSize) {
     g2d.drawLine(0, i, fullSize, i);
     g2d.drawLine(i, 0, i, fullSize);
   }
+
+  const lastPos = fullSize - 1;
+  g2d.drawLine(0, lastPos, lastPos, lastPos);
+  g2d.drawLine(lastPos, 0, lastPos, lastPos);
 };
