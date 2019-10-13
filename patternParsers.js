@@ -41,18 +41,18 @@ function parseRunLengthEncoding (patternText) {
   if (encoded.indexOf('!') !== encoded.length - 1) {
     throw new Error('Malformed RLE pattern');
   }
-  
+
   function addChunk(bool, str, array) {
     const length = str ? parseInt(str) : 1;
     array.push((new Array(length)).fill(bool));
   }
-  
+
   function addEmptyRows(length, array) {
     (new Array(length)).fill(null).forEach(function () {
       array.push((new Array(width)).fill(false));
     });
   }
-  
+
   function addRow (rowChunks, array, isLast) {
     let row = rowChunks.reduce(function (acc, cur) {
       return acc.concat(cur);
@@ -67,11 +67,11 @@ function parseRunLengthEncoding (patternText) {
     }
     array.push(row);
   }
-  
+
   let numberStr = '';
   let chunks = [];
   const pattern = [];
-  
+
   encoded.split('').forEach(function (char) {
     if (/\s/.test(char)) {
       return;
@@ -97,7 +97,7 @@ function parseRunLengthEncoding (patternText) {
       throw new Error('Unknown character');
     }
   });
-  
+
   if (pattern.length !== height) {
     throw new Error('Malformed RLE pattern: pattern.length: ' + pattern.length);
   }
