@@ -99,7 +99,7 @@ function parseRunLengthEncoding (patternText) {
   });
 
   if (pattern.length !== height) {
-    throw new Error('Malformed RLE pattern: pattern.length: ' + pattern.length);
+    throw new Error('Malformed RLE pattern');
   }
 
   return {
