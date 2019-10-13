@@ -148,8 +148,8 @@ LifeGui.prototype.showErrorMessage = function (error) {
 
 LifeGui.prototype.boardClick = function (event) {
   const pointClicked = event.getPoint();
-  const x = Math.floor(pointClicked.x / this.cellSize);
-  const y = Math.floor(pointClicked.y / this.cellSize);
+  const x = Math.floor((pointClicked.x - 2) / this.cellSize);
+  const y = Math.floor((pointClicked.y - 1) / this.cellSize);
 
   if (this.pattern) {
     try {
