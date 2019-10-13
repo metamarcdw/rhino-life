@@ -137,6 +137,15 @@ LifeGui.prototype.reset = function () {
   }
 };
 
+LifeGui.prototype.showErrorMessage = function (error) {
+  JOptionPane.showMessageDialog(
+    this.window,
+    error.message,
+    'Error',
+    JOptionPane.ERROR_MESSAGE
+  );
+};
+
 LifeGui.prototype.boardClick = function (event) {
   const pointClicked = event.getPoint();
   const x = Math.floor(pointClicked.x / this.cellSize);
@@ -146,12 +155,7 @@ LifeGui.prototype.boardClick = function (event) {
     try {
       this.board.copyBuffer(x, y, this.pattern);
     } catch (error) {
-      JOptionPane.showMessageDialog(
-        this.window,
-        error.message,
-        'Error',
-        JOptionPane.ERROR_MESSAGE
-      );
+      this.showErrorMessage(error);
     }
     this.pattern = null;
   } else {
@@ -164,12 +168,16 @@ LifeGui.prototype.boardClick = function (event) {
 LifeGui.prototype.loadPattern = function () {
   const patternText = this.showPatternDialog();
   if (patternText) {
-    if (patternText.includes('.O')) {
-      this.pattern = parsePlaintext(patternText);
-    } else if (patternText.includes('$')) {
-      this.pattern = parseRunLengthEncoding(patternText);
-    } else {
-      throw new Error('Unknown pattern encoding');
+    try {
+      if (patternText.includes('.O')) {
+        this.pattern = parsePlaintext(patternText);
+      } else if (patternText.includes('$')) {
+        this.pattern = parseRunLengthEncoding(patternText);
+      } else {
+        throw new Error('Unknown pattern encoding');
+      }
+    } catch (error) {
+      this.showErrorMessage(error);
     }
   }
 };
