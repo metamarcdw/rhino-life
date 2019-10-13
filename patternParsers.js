@@ -6,6 +6,12 @@ function parsePlaintext (patternText) {
     return !line.startsWith('!');
   });
 
+  lines.forEach(function (line) {
+    if (!/^(\.|O)*$/.test(line)) {
+      throw new Error('Unknown character');
+    }
+  });
+
   const height = lines.length;
   const width = lines.map(function (line) {
     return line.length;
