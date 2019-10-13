@@ -164,7 +164,13 @@ LifeGui.prototype.boardClick = function (event) {
 LifeGui.prototype.loadPattern = function () {
   const patternText = this.showPatternDialog();
   if (patternText) {
-    this.pattern = parsePlaintext(patternText);
+    if (patternText.includes('.O')) {
+      this.pattern = parsePlaintext(patternText);
+    } else if (patternText.includes('$')) {
+      this.pattern = parseRunLengthEncoding(patternText);
+    } else {
+      throw new Error('Unknown pattern encoding');
+    }
   }
 };
 

@@ -30,6 +30,7 @@
     "Timer": true,
     "Board": true,
     "LifeGui": true,
-    "parsePlaintext": true
+    "parsePlaintext": true,
+    "parseRunLengthEncoding": true
   }
 }
