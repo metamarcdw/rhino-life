@@ -13,11 +13,9 @@ function parsePlaintext (patternText) {
   });
 
   const height = lines.length;
-  const width = lines.map(function (line) {
-    return line.length;
-  }).sort(function (length1, length2) {
-    return length1 - length2;
-  }).pop();
+  const width = lines.slice().sort(function (line1, line2) {
+    return line1.length - line2.length;
+  }).pop().length;
 
   const pattern = lines.map(function (line) {
     return (new Array(width)).fill(false).map(function (_cell, index) {
