@@ -68,7 +68,7 @@ function LifeGui () {
   const updateSpeedBound = this.updateSpeed.bind(this);
   speedSlider.setInverted(true);
   speedSlider.setSnapToTicks(true);
-  speedSlider.setMajorTickSpacing(50);
+  speedSlider.setMajorTickSpacing(100);
   speedSlider.addChangeListener({ stateChanged: updateSpeedBound });
   buttonPanel.add(speedSlider);
 
@@ -227,7 +227,7 @@ LifeGui.prototype.drawGrid = function (g2d) {
   g2d.setStroke(new BasicStroke(1));
   const fullSize = this.size * this.cellSize;
 
-  for (let i = 0; i < fullSize; i += this.cellSize) {
+  for (var i = 0; i < fullSize; i += this.cellSize) {
     g2d.drawLine(0, i, fullSize, i);
     g2d.drawLine(i, 0, i, fullSize);
   }
