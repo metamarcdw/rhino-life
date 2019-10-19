@@ -58,7 +58,7 @@ function parseRunLengthEncoding (patternText) {
   }
 
   function addRow (rowChunks, array, isLast) {
-    let row = rowChunks.reduce(function (acc, cur) {
+    var row = rowChunks.reduce(function (acc, cur) {
       return acc.concat(cur);
     }, []);
     if (row.length !== width) {
@@ -72,8 +72,8 @@ function parseRunLengthEncoding (patternText) {
     array.push(row);
   }
 
-  let numberStr = '';
-  let chunks = [];
+  var numberStr = '';
+  var chunks = [];
   const pattern = [];
 
   encoded.split('').forEach(function (char) {

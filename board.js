@@ -8,7 +8,7 @@ function Board (size, visibleSize) {
   this.clear();
 }
 
-Board.prototype._visibleArea = function _visibleArea () {
+Board.prototype._visibleArea = function () {
   const diff = this._size - this._visibleSize;
   const offset = Math.floor(diff / 2);
   const endIndex = offset + this._visibleSize;
@@ -64,7 +64,10 @@ Board.prototype.copyBuffer = function (x, y, buffer) {
   x = this._adjustXY(x);
   y = this._adjustXY(y);
 
-  const { width, height, pattern } = buffer;
+  const width = buffer.width;
+  const height = buffer.height;
+  const pattern = buffer.pattern;
+
   const end = y + height;
   this._validateXY(x + width, end);
 
