@@ -43,7 +43,7 @@ function parseRunLengthEncoding (patternText) {
   const encoded = lines.join('');
 
   if (encoded.indexOf('!') !== encoded.length - 1) {
-    throw new Error('Malformed RLE pattern');
+    throw new Error('Malformed RLE pattern. "!" must be the last character.');
   }
 
   function addChunk(bool, str, array) {
@@ -57,16 +57,16 @@ function parseRunLengthEncoding (patternText) {
     });
   }
 
-  function addRow (rowChunks, array, isLast) {
+  function addRow (rowChunks, array) {
     var row = rowChunks.reduce(function (acc, cur) {
       return acc.concat(cur);
     }, []);
     if (row.length !== width) {
-      if (isLast) {
+      if (row.length < width) {
         const difference = width - row.length;
         row = row.concat((new Array(difference)).fill(false));
       } else {
-        throw new Error('Malformed RLE pattern');
+        throw new Error('Malformed RLE pattern. Row width can be no greater than: ' + width);
       }
     }
     array.push(row);
@@ -87,7 +87,7 @@ function parseRunLengthEncoding (patternText) {
     } else if (char === 'o') {
       addChunk(true, numberStr, chunks);
       numberStr = '';
-    } else if (char === '$') {
+    } else if (char === '$' || char === '!') {
       addRow(chunks, pattern);
       chunks = [];
 
@@ -95,15 +95,13 @@ function parseRunLengthEncoding (patternText) {
         addEmptyRows(parseInt(numberStr) - 1, pattern);
         numberStr = '';
       }
-    } else if (char === '!') {
-      addRow(chunks, pattern, true);
     } else {
       throw new Error('Unknown character');
     }
   });
 
   if (pattern.length !== height) {
-    throw new Error('Malformed RLE pattern');
+    throw new Error('Malformed RLE pattern. Height should be: ' + height);
   }
 
   return {
