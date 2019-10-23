@@ -13,14 +13,14 @@ function LifeGui () {
   const defaultSpeed = 500;
   const defaultZoom = 10;
 
-  this.size = 100;
+  this.size = 50;
   this.cellSize = 10;
   const fullSize = Math.floor(this.size * 1.1);
   this.board = new Board(fullSize, this.size);
 
   this.window = new JFrame('Rhino Life');
   this.window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-  this.window.setSize(this.size * 11, this.size * 12.5);
+  this.window.setSize(this.size * 17, this.size * 12.5);
 
   const panel = new JPanel();
   panel.setLayout(new BorderLayout());
@@ -44,7 +44,7 @@ function LifeGui () {
   const zoomLabel = new JLabel('Zoom');
   buttonPanel.add(zoomLabel);
 
-  const zoomSlider = new JSlider(JSlider.HORIZONTAL, 3, 20, defaultZoom);
+  const zoomSlider = new JSlider(JSlider.HORIZONTAL, 5, 20, defaultZoom);
   const updateZoomBound = this.updateZoom.bind(this);
   zoomSlider.addChangeListener({ stateChanged: updateZoomBound });
   buttonPanel.add(zoomSlider);
