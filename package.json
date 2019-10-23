@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "java -cp \"$HOME/Documents/rhino/rhino-1.7.11.jar:.\" org.mozilla.javascript.tools.jsc.Main -nosource -main-method-class index -opt 9 -d dist/ *.js",
+    "build": "java -cp \"$HOME/Documents/rhino/rhino-1.7.11.jar:.\" org.mozilla.javascript.tools.jsc.Main -main-method-class index -opt 9 -d dist/ *.js",
     "start": "java -cp \"$HOME/Documents/rhino/rhino-1.7.11.jar:.\" org.mozilla.javascript.tools.shell.Main dist/index.class"
   },
   "keywords": [],
