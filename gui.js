@@ -2,7 +2,10 @@ importPackage(java.awt);
 importPackage(Packages.javax.swing);
 
 importClass(java.awt.image.BufferedImage);
+importClass(Packages.javax.swing.border.EmptyBorder);
+
 importClass(java.lang.Thread);
+importClass(java.net.URI);
 
 load('board.js');
 load('patternParsers.js');
@@ -20,7 +23,7 @@ function LifeGui () {
 
   this.window = new JFrame('Rhino Life');
   this.window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-  this.window.setSize(this.size * 17, this.size * 12.5);
+  this.window.setSize(this.size * 17, this.size * 13);
 
   const panel = new JPanel();
   panel.setLayout(new BorderLayout());
@@ -38,10 +41,11 @@ function LifeGui () {
   panel.add(scrollPane);
 
   const buttonPanel = new JPanel();
-  buttonPanel.setLayout(new FlowLayout());
+  buttonPanel.setBorder(new EmptyBorder(5, 5, 5, 100));
+  buttonPanel.setLayout(new GridLayout(2, 4, 10, 5));
   panel.add(buttonPanel, BorderLayout.PAGE_END);
 
-  const zoomLabel = new JLabel('Zoom');
+  const zoomLabel = new JLabel('Zoom', SwingConstants.RIGHT);
   buttonPanel.add(zoomLabel);
 
   const zoomSlider = new JSlider(JSlider.HORIZONTAL, 5, 20, defaultZoom);
@@ -54,15 +58,13 @@ function LifeGui () {
   this.startOrStopButton.addActionListener({ actionPerformed: startOrStopBound });
   buttonPanel.add(this.startOrStopButton);
 
-  const resetButton = new JButton('Reset');
-  const resetBound = this.reset.bind(this);
-  resetButton.addActionListener({ actionPerformed: resetBound });
-  buttonPanel.add(resetButton);
-
   const loadButton = new JButton('Load Pattern');
   const loadPatternBound = this.loadPattern.bind(this);
   loadButton.addActionListener({ actionPerformed: loadPatternBound });
   buttonPanel.add(loadButton);
+
+  const speedLabel = new JLabel('Speed', SwingConstants.RIGHT);
+  buttonPanel.add(speedLabel);
 
   const speedSlider = new JSlider(JSlider.HORIZONTAL, 10, 1000, defaultSpeed);
   const updateSpeedBound = this.updateSpeed.bind(this);
@@ -72,11 +74,22 @@ function LifeGui () {
   speedSlider.addChangeListener({ stateChanged: updateSpeedBound });
   buttonPanel.add(speedSlider);
 
-  const speedLabel = new JLabel('Speed');
-  buttonPanel.add(speedLabel);
+  const resetButton = new JButton('Reset');
+  const resetBound = this.reset.bind(this);
+  resetButton.addActionListener({ actionPerformed: resetBound });
+  buttonPanel.add(resetButton);
 
   const updateBound = this.update.bind(this);
   this.timer = new Timer(defaultSpeed, { actionPerformed: updateBound });
+
+  const sizePanel = new JPanel();
+  const sizeLabel = new JLabel('Size');
+  const sizeField = new JTextField(this.size, 5);
+  const sizeButton = JButton('Go');
+  sizePanel.add(sizeLabel);
+  sizePanel.add(sizeField);
+  sizePanel.add(sizeButton);
+  buttonPanel.add(sizePanel);
 }
 
 LifeGui.prototype.showUI = function () {
@@ -183,10 +196,33 @@ LifeGui.prototype.loadPattern = function () {
 };
 
 LifeGui.prototype.showPatternDialog = function () {
+  const dialogPanel = new JPanel();
+  dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
+
   const ta = new JTextArea(10, 30);
+  dialogPanel.add(new JScrollPane(ta));
+
+  const URL = 'https://www.conwaylife.com/wiki/Category:Patterns';
+  const linkLabel = new JLabel('Find Patterns');
+  linkLabel.setForeground(Color.BLUE);
+  linkLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+  linkLabel.addMouseListener({
+    mouseClicked: function () {
+      try {
+        Desktop.getDesktop().browse(new URI(URL));
+      } catch (error) {
+        print(error);
+        if (error.javaException) {
+          error.javaException.printStackTrace();
+        }
+      }
+    }
+  });
+  dialogPanel.add(linkLabel);
+
   const result = JOptionPane.showConfirmDialog(
     this.window,
-    new JScrollPane(ta),
+    dialogPanel,
     'Enter Object pattern',
     JOptionPane.OK_CANCEL_OPTION
   );
