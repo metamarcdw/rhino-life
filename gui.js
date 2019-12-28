@@ -84,10 +84,15 @@ function LifeGui () {
 
   const sizePanel = new JPanel();
   const sizeLabel = new JLabel('Size');
-  const sizeField = new JTextField(this.size, 5);
+  this.sizeField = new JTextField(this.size, 5);
+
   const sizeButton = JButton('Go');
+  const changeSizeBound = this.changeSize.bind(this);
+  sizeButton.addActionListener({ actionPerformed: changeSizeBound });
+  buttonPanel.add(sizeButton);
+
   sizePanel.add(sizeLabel);
-  sizePanel.add(sizeField);
+  sizePanel.add(this.sizeField);
   sizePanel.add(sizeButton);
   buttonPanel.add(sizePanel);
 }
@@ -176,6 +181,19 @@ LifeGui.prototype.boardClick = function (event) {
   }
 
   this.updateBoardImage();
+};
+
+LifeGui.prototype.changeSize = function () {
+  const newSize = parseInt(this.sizeField.getText(), 10);
+  this.size = newSize;
+  const fullSize = Math.floor(this.size * 1.1);
+
+  this.board = new Board(fullSize, this.size);
+  this.initializeBoard();
+  this.updateBoardImage();
+  if (this.running) {
+    this.startOrStop();
+  }
 };
 
 LifeGui.prototype.loadPattern = function () {
